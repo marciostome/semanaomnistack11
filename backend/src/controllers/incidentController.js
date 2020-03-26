@@ -3,12 +3,13 @@ const connection = require('../database/connection')
 module.exports = {
 
   async index (request, response) {
+    const ong_id = request.headers.authorization
     const { page = 1 } = request.params
 
     const [count] = await connection('incidents').count()
 
     const incidents = await connection('incidents')
-      .join('ongs', 'ongs.id', '=', 'incidents.ong_id')
+      .join('ongs', ongs.id, '=', 'incidents.ong_id')
       .limit(5)
       .offset((page -1) * 5)
       .select([
@@ -41,7 +42,7 @@ module.exports = {
     const { id } = request.params
     const ong_id = request.headers.authorization
 
-    const incident = await connection('indicents')
+    const incident = await connection('incidents')
       .where('id', id)
       .select('ong_id')
       .first()
