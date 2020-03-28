@@ -33,7 +33,6 @@ module.exports = {
       value,
       ong_id
     })
-    console.log('Caso '+id+' criado')
     return response.json({ id })
   },
 
