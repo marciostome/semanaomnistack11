@@ -4,14 +4,14 @@ module.exports = {
 
   async index (request, response) {
     const ong_id = request.headers.authorization
-    const { page = 1 } = request.params
+    const { page } = request.query
 
     const [count] = await connection('incidents').count()
 
     const incidents = await connection('incidents')
-      .join('ongs', ongs.id, '=', 'incidents.ong_id')
+      .join('ongs', 'ongs.id', '=', 'incidents.ong_id')
       .limit(5)
-      .offset((page -1) * 5)
+      .offset((page-1) * 5)
       .select([
         'incidents.*', 
         'ongs.name', 
@@ -20,9 +20,7 @@ module.exports = {
         'ongs.city', 
         'ongs.uf'
       ])
-
-    response.header('X-Total-Count', count['count(*)'])  
-    
+    response.header('X-Total-Count', count['count(*)'])      
     return response.json(incidents)
   },
 
@@ -35,6 +33,7 @@ module.exports = {
       value,
       ong_id
     })
+    console.log('Caso '+id+' criado')
     return response.json({ id })
   },
 
